@@ -4,7 +4,7 @@ const products = [
   {
     title: "WPS Open Front Process Pressure Gauge",
     subtitle: "WPS Process Pressure Gauge",
-    image: "/products/sample_product.png",
+    image: "/products/sample_product.jpg",
     specs: [
       "Size: 63mm, 100mm, 115mm",
       "Accuracy: 1%, optional 0.5%",
@@ -16,7 +16,7 @@ const products = [
   {
     title: "GFS Industrial Pressure Gauge",
     subtitle: "Heavy duty industrial pressure gauge",
-    image: "/products/sample_product.png",
+    image: "/products/sample_product.jpg",
     specs: [
       "Size: 63mm, 100mm",
       "Accuracy: 1.6%",
@@ -27,7 +27,7 @@ const products = [
   {
     title: "WPS Open Front Process Pressure Gauge",
     subtitle: "WPS Process Pressure Gauge",
-    image: "/products/sample_product.png",
+    image: "/products/sample_product.jpg",
     specs: [
       "Size: 63mm, 100mm, 115mm",
       "Accuracy: 1%, optional 0.5%",
@@ -39,7 +39,7 @@ const products = [
   {
     title: "GFS Industrial Pressure Gauge",
     subtitle: "Heavy duty industrial pressure gauge",
-    image: "/products/sample_product.png",
+    image: "/products/sample_product.jpg",
     specs: [
       "Size: 63mm, 100mm",
       "Accuracy: 1.6%",
@@ -50,7 +50,7 @@ const products = [
   {
     title: "WPS Open Front Process Pressure Gauge",
     subtitle: "WPS Process Pressure Gauge",
-    image: "/products/sample_product.png",
+    image: "/products/sample_product.jpg",
     specs: [
       "Size: 63mm, 100mm, 115mm",
       "Accuracy: 1%, optional 0.5%",
@@ -62,7 +62,7 @@ const products = [
   {
     title: "GFS Industrial Pressure Gauge",
     subtitle: "Heavy duty industrial pressure gauge",
-    image: "/products/sample_product.png",
+    image: "/products/sample_product.jpg",
     specs: [
       "Size: 63mm, 100mm",
       "Accuracy: 1.6%",

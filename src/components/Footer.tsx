@@ -11,7 +11,7 @@ export default function Footer() {
         {/* Column 1 */}
         <div>
           <div className="flex items-center gap-2 mb-6">
-            <Image src="/logo.png" alt="logo" width={40} height={40} />
+            <Image src="/logo.jpg" alt="logo" width={40} height={40} />
             <h2 className="text-2xl font-semibold">VARAHI</h2>
           </div>
 
@@ -21,12 +21,12 @@ export default function Footer() {
             India.
           </p>
 
-          <div className="flex gap-4">
-            <Image src="/ce.png" alt="ce" width={40} height={30}/>
-            <Image src="/atex.png" alt="atex" width={40} height={30}/>
-            <Image src="/ibr.png" alt="ibr" width={40} height={30}/>
-            <Image src="/iso.png" alt="iso" width={40} height={30}/>
-          </div>
+          {/* <div className="flex gap-4">
+            <Image src="/ce.jpg" alt="ce" width={40} height={30}/>
+            <Image src="/atex.jpg" alt="atex" width={40} height={30}/>
+            <Image src="/ibr.jpg" alt="ibr" width={40} height={30}/>
+            <Image src="/iso.jpg" alt="iso" width={40} height={30}/>
+          </div> */}
         </div>
 
         {/* Column 2 */}

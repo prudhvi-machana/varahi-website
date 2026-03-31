@@ -7,8 +7,6 @@ export const navigation = [
     megaMenu: true,
   },
 
-  { name: "News & Events", href: "/news" },
-
   { name: "Brochure", href: "/brochure.pdf" },
 
   { name: "Contact Us", href: "/contact" },

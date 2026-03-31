@@ -5,21 +5,23 @@ import Autoplay from "embla-carousel-autoplay";
 import { useCallback, useState, useEffect } from "react";
 import Image from "next/image";
 
+const NAVBAR_HEIGHT = 100;
+
 const slides = [
   {
-    image: "/slide1.jpg",
-    title: "Precision Manufacturing",
-    subtitle: "High quality machining solutions",
+    image: "/slide1.webp",
+    title: "Quality in sales and services",
+    subtitle: "Better quality and better services for our customers",
   },
   {
-    image: "/slide2.jpg",
-    title: "Advanced Engineering",
-    subtitle: "State of the art technology",
+    image: "/slide2.webp",
+    title: "Service - Focused",
+    subtitle: "Customer satisfaction is our top priority",
   },
   {
-    image: "/slide3.jpg",
-    title: "Reliable Production",
-    subtitle: "Built with accuracy",
+    image: "/slide3.jpeg",
+    title: "Experienced Engineering",
+    subtitle: "15+ years of experience in calibration and instrumentation industry",
   },
 ];
 
@@ -51,72 +53,69 @@ export default function HeroCarousel() {
   }, [emblaApi]);
 
   return (
-    <section className="relative w-full overflow-hidden">
-
+    <section
+      className="relative w-full overflow-hidden"
+      style={{ marginTop: NAVBAR_HEIGHT }}
+    >
       {/* Carousel */}
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
-
           {slides.map((slide, index) => (
-            <div key={index} className="min-w-full h-[550px] relative">
-
-              {/* Optimized Next.js image */}
+            <div
+              key={index}
+              className="min-w-full relative h-[400px] sm:h-[500px] md:h-[550px]"
+            >
               <Image
                 src={slide.image}
                 alt="hero"
                 fill
                 priority
-                className="object-cover"
+                className="object-cover object-center"
               />
 
               {/* Overlay */}
               <div className="absolute inset-0 bg-black/40 flex items-center">
                 <div className="max-w-7xl mx-auto px-6 text-white">
-                  <h1 className="text-5xl font-bold mb-4">
+                  <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">
                     {slide.title}
                   </h1>
-                  <p className="text-lg">
+                  <p className="text-sm sm:text-base md:text-lg">
                     {slide.subtitle}
                   </p>
                 </div>
               </div>
-
             </div>
           ))}
-
         </div>
       </div>
 
-      {/* Arrow Buttons */}
+      {/* Arrows */}
       <button
         onClick={scrollPrev}
-        className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/80 px-4 py-2"
+        className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 md:px-4 rounded"
       >
         ‹
       </button>
 
       <button
         onClick={scrollNext}
-        className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/80 px-4 py-2"
+        className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 md:px-4 rounded"
       >
         ›
       </button>
 
-      {/* Navigation Dots */}
-      <div className="absolute bottom-6 w-full flex justify-center gap-3">
+      {/* Dots */}
+      <div className="absolute bottom-4 md:bottom-6 w-full flex justify-center gap-3">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => emblaApi?.scrollTo(index)}
             className={`h-3 w-3 rounded-full ${
-              index === selectedIndex
-                ? "bg-white"
-                : "bg-white/50"
+              index === selectedIndex ? "bg-white" : "bg-white/50"
             }`}
           />
         ))}
       </div>
-
     </section>
   );
 }

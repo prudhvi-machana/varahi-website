@@ -1,30 +1,11 @@
 import ProductCard from "./ProductCard";
 
-interface Product {
-  title: string;
-  subtitle: string;
-  image: string;
-  specs: string[];
-}
-
-interface ProductGridProps {
-  products: Product[];
-}
-
-export default function ProductGrid({ products }: ProductGridProps) {
+export default function ProductGrid({ products }: any) {
   return (
-    <div className="grid md:grid-cols-2 gap-10">
-
-      {products.map((product, index) => (
-        <ProductCard
-          key={index}
-          title={product.title}
-          subtitle={product.subtitle}
-          image={product.image}
-          specs={product.specs}
-        />
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      {products.map((product: any, index: number) => (
+        <ProductCard key={index} {...product} />
       ))}
-
     </div>
   );
 }

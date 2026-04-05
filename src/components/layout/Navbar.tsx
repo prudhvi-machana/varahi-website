@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { navigation } from "@/config/navigation";
@@ -9,6 +9,25 @@ import { productsMenu } from "@/config/productsMenu";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openMega, setOpenMega] = useState<string | null>(null);
+
+  const desktopMegaRef = useRef<HTMLDivElement>(null);
+  const mobileMegaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      const target = event.target as Node;
+      if (
+        desktopMegaRef.current &&
+        !desktopMegaRef.current.contains(target) &&
+        mobileMegaRef.current &&
+        !mobileMegaRef.current.contains(target)
+      ) {
+        setOpenMega(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
@@ -24,33 +43,40 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Navbar */}
-      <div className="bg-white/80 backdrop-blur-md border-b shadow-sm">
+      {/* ✅ Add relative here so mega menu positions against full navbar width */}
+      <div className="relative bg-white/80 backdrop-blur-md border-b shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
             <Image src="/logo.jpg" alt="Varahi Logo" width={50} height={50} />
             <span className="text-lg sm:text-2xl lg:text-3xl font-black text-[#333]">
-              VARAHI
+              VARAHI AUTOMATIONS
             </span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-8">
-
             {navigation.map((item) => (
-              <div key={item.name} className="relative group">
-
-                <Link
-                  href={item.href}
-                  className="flex items-center gap-1 text-gray-700 font-medium hover:text-red-500"
-                >
-                  {item.name}
-
-                  {item.megaMenu && (
+              <div
+                key={item.name}
+                // ✅ Only keep relative on non-mega items (for dropdowns that should anchor to the item)
+                // Mega menu items intentionally have no relative so they anchor to the navbar instead
+                className={item.megaMenu ? undefined : "relative"}
+                ref={item.megaMenu ? desktopMegaRef : null}
+              >
+                {item.megaMenu ? (
+                  <button
+                    onClick={() =>
+                      setOpenMega(openMega === item.name ? null : item.name)
+                    }
+                    className="flex items-center gap-1 text-gray-700 font-medium hover:text-red-500"
+                  >
+                    {item.name}
                     <svg
-                      className="w-4 h-4 transition-transform duration-300 group-hover:rotate-180"
+                      className={`w-4 h-4 transition-transform duration-200 ${
+                        openMega === item.name ? "rotate-180" : ""
+                      }`}
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
@@ -58,18 +84,34 @@ export default function Header() {
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
                     </svg>
-                  )}
-                </Link>
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="flex items-center gap-1 text-gray-700 font-medium hover:text-red-500"
+                  >
+                    {item.name}
+                  </Link>
+                )}
 
-                {/* Mega Menu */}
+                {/* ✅ Mega menu now anchors to navbar — left-1/2 means center of full navbar */}
                 {item.megaMenu && (
-                  <div className="absolute left-0 top-full w-[600px] bg-white shadow-xl border border-t-2 border-t-blue-800 p-8 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition z-50">
-
+                  <div
+                    className={`
+                      absolute top-full left-1/2 -translate-x-1/2
+                      w-[min(95vw,900px)] bg-white shadow-xl
+                      border border-t-2 border-t-blue-800 p-6 sm:p-8 z-50
+                      transition-all duration-200 ease-out
+                      ${openMega === item.name
+                        ? "opacity-100 translate-y-0 pointer-events-auto visible"
+                        : "opacity-0 translate-y-1 pointer-events-none invisible"
+                      }
+                    `}
+                  >
                     <h3 className="font-black mb-6 text-lg text-[#333]">
                       VARAHI PRODUCTS
                     </h3>
-
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
                       {productsMenu.map((product) => (
                         <Link
                           key={product.name}
@@ -86,13 +128,11 @@ export default function Header() {
                         </Link>
                       ))}
                     </div>
-
                   </div>
                 )}
 
               </div>
             ))}
-
           </nav>
 
           {/* Mobile Menu Button */}
@@ -118,19 +158,37 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu */}
-        {menuOpen && (
-          <div className="lg:hidden bg-white border-t px-4 py-4 space-y-4">
-
+        <div
+          className={`
+            lg:hidden bg-white border-t overflow-hidden
+            transition-all duration-300 ease-in-out
+            ${menuOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}
+          `}
+        >
+          <div className="px-4 py-4 space-y-4">
             {navigation.map((item) => (
-              <div key={item.name}>
-
+              <div
+                key={item.name}
+                ref={item.megaMenu ? mobileMegaRef : null}
+              >
                 <div className="flex justify-between items-center">
-                  <Link
-                    href={item.href}
-                    className="text-gray-800 font-medium"
-                  >
-                    {item.name}
-                  </Link>
+                  {item.megaMenu ? (
+                    <button
+                      onClick={() =>
+                        setOpenMega(openMega === item.name ? null : item.name)
+                      }
+                      className="text-gray-800 font-medium"
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className="text-gray-800 font-medium"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
 
                   {item.megaMenu && (
                     <button
@@ -139,7 +197,7 @@ export default function Header() {
                       }
                     >
                       <svg
-                        className={`w-5 h-5 transition ${
+                        className={`w-5 h-5 transition-transform duration-200 ${
                           openMega === item.name ? "rotate-180" : ""
                         }`}
                         fill="none"
@@ -153,31 +211,40 @@ export default function Header() {
                   )}
                 </div>
 
-                {item.megaMenu && openMega === item.name && (
-                  <div className="mt-3 grid grid-cols-2 gap-3 pl-2">
-                    {productsMenu.map((product) => (
-                      <Link
-                        key={product.name}
-                        href={product.href}
-                        className="flex items-center gap-2 text-sm hover:text-red-500"
-                      >
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          width={30}
-                          height={30}
-                        />
-                        <span>{product.name}</span>
-                      </Link>
-                    ))}
+                {item.megaMenu && (
+                  <div
+                    className={`
+                      overflow-hidden transition-all duration-200 ease-out
+                      ${openMega === item.name
+                        ? "max-h-[600px] opacity-100 mt-3"
+                        : "max-h-0 opacity-0"
+                      }
+                    `}
+                  >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-2">
+                      {productsMenu.map((product) => (
+                        <Link
+                          key={product.name}
+                          href={product.href}
+                          className="flex items-center gap-2 text-sm hover:text-red-500"
+                        >
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            width={30}
+                            height={30}
+                          />
+                          <span>{product.name}</span>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
 
               </div>
             ))}
-
           </div>
-        )}
+        </div>
 
       </div>
     </header>

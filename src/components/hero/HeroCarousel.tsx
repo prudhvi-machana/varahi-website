@@ -5,8 +5,6 @@ import Autoplay from "embla-carousel-autoplay";
 import { useCallback, useState, useEffect } from "react";
 import Image from "next/image";
 
-const NAVBAR_HEIGHT = 100;
-
 const slides = [
   {
     image: "/slide1.webp",
@@ -21,7 +19,8 @@ const slides = [
   {
     image: "/slide3.jpeg",
     title: "Experienced Engineering",
-    subtitle: "15+ years of experience in calibration and instrumentation industry",
+    subtitle:
+      "15+ years of experience in calibration and instrumentation industry",
   },
 ];
 
@@ -34,11 +33,11 @@ export default function HeroCarousel() {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const scrollPrev = useCallback(() => {
-    emblaApi && emblaApi.scrollPrev();
+    emblaApi?.scrollPrev();
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    emblaApi && emblaApi.scrollNext();
+    emblaApi?.scrollNext();
   }, [emblaApi]);
 
   useEffect(() => {
@@ -53,33 +52,29 @@ export default function HeroCarousel() {
   }, [emblaApi]);
 
   return (
-    <section
-      className="relative w-full overflow-hidden"
-      style={{ marginTop: NAVBAR_HEIGHT }}
-    >
-      {/* Carousel */}
+    <section className="relative w-full overflow-hidden pt-[116px] sm:pt-[116px] lg:pt-[116px]">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">
           {slides.map((slide, index) => (
             <div
               key={index}
-              className="min-w-full relative h-[400px] sm:h-[500px] md:h-[550px]"
+              className="min-w-full relative h-[60vh] sm:h-[70vh] lg:h-[60vh]"
             >
               <Image
                 src={slide.image}
                 alt="hero"
                 fill
                 priority
-                className="object-cover object-center"
+                className="object-cover"
               />
 
               {/* Overlay */}
-              <div className="absolute inset-0 bg-black/40 flex items-center">
-                <div className="max-w-7xl mx-auto px-6 text-white">
-                  <h1 className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4">
+              <div className="absolute inset-0 bg-black/50 flex items-center">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+                  <h1 className="text-2xl sm:text-4xl lg:text-6xl font-bold mb-4 leading-tight">
                     {slide.title}
                   </h1>
-                  <p className="text-sm sm:text-base md:text-lg">
+                  <p className="text-sm sm:text-base lg:text-lg max-w-xl">
                     {slide.subtitle}
                   </p>
                 </div>
@@ -92,14 +87,14 @@ export default function HeroCarousel() {
       {/* Arrows */}
       <button
         onClick={scrollPrev}
-        className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 md:px-4 rounded"
+        className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white/50 transition px-3 py-2 md:px-4 rounded-full"
       >
         ‹
       </button>
 
       <button
         onClick={scrollNext}
-        className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 bg-white/80 px-3 py-2 md:px-4 rounded"
+        className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white/50 transition px-3 py-2 md:px-4 rounded-full"
       >
         ›
       </button>

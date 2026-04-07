@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { navigation } from "@/config/navigation";
 import { productsMenu } from "@/config/productsMenu";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,7 +44,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* ✅ Add relative here so mega menu positions against full navbar width */}
+      {/* Navbar */}
       <div className="relative bg-white/80 backdrop-blur-md border-b shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
 
@@ -60,87 +61,92 @@ export default function Header() {
             {navigation.map((item) => (
               <div
                 key={item.name}
-                // ✅ Only keep relative on non-mega items (for dropdowns that should anchor to the item)
-                // Mega menu items intentionally have no relative so they anchor to the navbar instead
                 className={item.megaMenu ? undefined : "relative"}
                 ref={item.megaMenu ? desktopMegaRef : null}
               >
                 {item.megaMenu ? (
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() =>
                       setOpenMega(openMega === item.name ? null : item.name)
                     }
                     className="flex items-center gap-1 text-gray-700 font-medium hover:text-red-500"
                   >
                     {item.name}
-                    <svg
-                      className={`w-4 h-4 transition-transform duration-200 ${
-                        openMega === item.name ? "rotate-180" : ""
-                      }`}
+                    <motion.svg
+                      animate={{ rotate: openMega === item.name ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
                       viewBox="0 0 24 24"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-                    </svg>
-                  </button>
+                      <path d="M6 9l6 6 6-6" />
+                    </motion.svg>
+                  </motion.button>
                 ) : (
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-1 text-gray-700 font-medium hover:text-red-500"
-                  >
-                    {item.name}
-                  </Link>
+                  <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.95 }}>
+                    <Link
+                      href={item.href}
+                      className="text-gray-700 font-medium hover:text-red-500"
+                    >
+                      {item.name}
+                    </Link>
+                  </motion.div>
                 )}
 
-                {/* ✅ Mega menu now anchors to navbar — left-1/2 means center of full navbar */}
-                {item.megaMenu && (
-                  <div
-                    className={`
-                      absolute top-full left-1/2 -translate-x-1/2
-                      w-[min(95vw,900px)] bg-white shadow-xl
-                      border border-t-2 border-t-blue-800 p-6 sm:p-8 z-50
-                      transition-all duration-200 ease-out
-                      ${openMega === item.name
-                        ? "opacity-100 translate-y-0 pointer-events-auto visible"
-                        : "opacity-0 translate-y-1 pointer-events-none invisible"
-                      }
-                    `}
-                  >
-                    <h3 className="font-black mb-6 text-lg text-[#333]">
-                      VARAHI PRODUCTS
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                      {productsMenu.map((product) => (
-                        <Link
-                          key={product.name}
-                          href={product.href}
-                          className="flex items-center gap-4 hover:text-red-500"
-                        >
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={40}
-                            height={40}
-                          />
-                          <span>{product.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {/* Mega Menu */}
+                <AnimatePresence>
+                  {item.megaMenu && openMega === item.name && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                      transition={{ duration: 0.25 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 w-[min(95vw,900px)] bg-white shadow-xl border border-t-2 border-t-blue-800 p-6 sm:p-8 z-50"
+                    >
+                      <h3 className="font-black mb-6 text-lg text-[#333]">
+                        VARAHI PRODUCTS
+                      </h3>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                        {productsMenu.map((product) => (
+                          <motion.div
+                            key={product.name}
+                            whileHover={{ x: 5 }}
+                          >
+                            <Link
+                              href={product.href}
+                              className="flex items-center gap-4 hover:text-red-500"
+                            >
+                              <Image
+                                src={product.image}
+                                alt={product.name}
+                                width={40}
+                                height={40}
+                              />
+                              <span>{product.name}</span>
+                            </Link>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
               </div>
             ))}
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Button */}
           <button
             className="lg:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            <svg
+            <motion.svg
+              animate={{ rotate: menuOpen ? 90 : 0 }}
               className="w-7 h-7"
               fill="none"
               stroke="currentColor"
@@ -148,103 +154,45 @@ export default function Header() {
               viewBox="0 0 24 24"
             >
               {menuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <path d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                <path d="M4 6h16M4 12h16M4 18h16" />
               )}
-            </svg>
+            </motion.svg>
           </button>
 
         </div>
 
         {/* Mobile Menu */}
-        <div
-          className={`
-            lg:hidden bg-white border-t overflow-hidden
-            transition-all duration-300 ease-in-out
-            ${menuOpen ? "max-h-[800px] opacity-100" : "max-h-0 opacity-0"}
-          `}
-        >
-          <div className="px-4 py-4 space-y-4">
-            {navigation.map((item) => (
-              <div
-                key={item.name}
-                ref={item.megaMenu ? mobileMegaRef : null}
-              >
-                <div className="flex justify-between items-center">
-                  {item.megaMenu ? (
-                    <button
-                      onClick={() =>
-                        setOpenMega(openMega === item.name ? null : item.name)
-                      }
-                      className="text-gray-800 font-medium"
-                    >
-                      {item.name}
-                    </button>
-                  ) : (
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden bg-white border-t overflow-hidden"
+            >
+              <div className="px-4 py-4 space-y-4">
+                {navigation.map((item, i) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
                     <Link
                       href={item.href}
                       className="text-gray-800 font-medium"
                     >
                       {item.name}
                     </Link>
-                  )}
-
-                  {item.megaMenu && (
-                    <button
-                      onClick={() =>
-                        setOpenMega(openMega === item.name ? null : item.name)
-                      }
-                    >
-                      <svg
-                        className={`w-5 h-5 transition-transform duration-200 ${
-                          openMega === item.name ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-
-                {item.megaMenu && (
-                  <div
-                    className={`
-                      overflow-hidden transition-all duration-200 ease-out
-                      ${openMega === item.name
-                        ? "max-h-[600px] opacity-100 mt-3"
-                        : "max-h-0 opacity-0"
-                      }
-                    `}
-                  >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pl-2">
-                      {productsMenu.map((product) => (
-                        <Link
-                          key={product.name}
-                          href={product.href}
-                          className="flex items-center gap-2 text-sm hover:text-red-500"
-                        >
-                          <Image
-                            src={product.image}
-                            alt={product.name}
-                            width={30}
-                            height={30}
-                          />
-                          <span>{product.name}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
+                  </motion.div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </header>

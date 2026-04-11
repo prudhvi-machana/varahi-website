@@ -4,10 +4,14 @@ export const navigation = [
   {
     name: "Products",
     href: "/products",
-    megaMenu: true,
+  },
+  
+  {
+    name: "Services",
+    href: "/services",
   },
 
   { name: "Brochure", href: "/brochure.pdf" },
 
-  { name: "Contact Us", href: "/contact" },
+  { name: "Contact Us", href: "/#contact" },
 ];

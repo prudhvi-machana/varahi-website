@@ -27,7 +27,7 @@ export default function ProductsSection({
               Our <span className="text-red-500">Products</span>
             </h2>
 
-            <p className="text-gray-700 max-w-3xl mb-10 sm:mb-12 text-sm sm:text-base">
+            <p className="text-gray-700 leading-relaxed max-w-3xl">
               Our comprehensive product line includes pressure gauges,
               differential pressure gauges, diaphragm seals, pressure
               transmitters, temperature gauges, temperature elements and

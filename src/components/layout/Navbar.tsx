@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { navigation } from "@/config/navigation";
@@ -8,6 +8,26 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setFooterVisible(entry.isIntersecting);
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    observer.observe(footer);
+
+    return () => observer.disconnect();
+  }, []);
 
   const scrollToContact = () => {
     setMenuOpen(false);
@@ -24,7 +44,18 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Top Bar */}
-      <div className="bg-gray-900 text-white text-xs sm:text-sm">
+      <motion.div
+        animate={{
+          height: footerVisible ? 0 : "auto",
+          opacity: footerVisible ? 0 : 1,
+          y: footerVisible ? -20 : 0,
+        }}
+        transition={{
+          duration: 0.4,
+          ease: "easeInOut",
+        }}
+        className="bg-gray-900 text-white text-xs sm:text-sm overflow-hidden"
+      >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 py-2 gap-1 sm:gap-0">
           <div className="flex flex-col sm:flex-row gap-1 sm:gap-6 text-center sm:text-left">
             <span>+91 9701879791</span>
@@ -32,10 +63,17 @@ export default function Header() {
           </div>
           <span>Mon–Sat 8:00–20:00</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* Navbar */}
-      <div className="relative bg-white/80 backdrop-blur-md border-b shadow-sm">
+      <motion.div
+        layout
+        transition={{
+          duration: 0.4,
+          ease: "easeInOut",
+        }}
+        className="relative bg-white/80 backdrop-blur-md border-b shadow-sm"
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
@@ -73,10 +111,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile Button */}
-          <button
-            className="lg:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
+          <button className="lg:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             <motion.svg
               animate={{ rotate: menuOpen ? 90 : 0 }}
               className="w-7 h-7"
@@ -134,7 +169,7 @@ export default function Header() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </header>
   );
 }

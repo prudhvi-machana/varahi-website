@@ -1,15 +1,28 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { FaArrowUp } from "react-icons/fa";
 
 export default function Footer() {
+  const scrollToTop = () => {
+    document.documentElement.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <footer id="contact" className="bg-[#021734] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid md:grid-cols-2 gap-12">
         <div>
           <div className="flex items-center gap-2 mb-6">
-            <Image src="/logo.jpg" alt="logo" width={40} height={40} />
+            <Image
+              src="/logo.jpg"
+              alt="logo"
+              width={40}
+              height={40}
+              style={{ width: "auto", height: "auto" }}
+            />
             <h2 className="text-xl sm:text-2xl font-semibold">
               VARAHI AUTOMATIONS
             </h2>
@@ -44,8 +57,9 @@ export default function Footer() {
         </p>
 
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={scrollToTop}
           className="bg-[#ff4b2b] p-3 rounded-full hover:scale-110 transition"
+          aria-label="Scroll to top"
         >
           <FaArrowUp />
         </button>

@@ -12,16 +12,13 @@ export default function Header() {
 
   useEffect(() => {
     const footer = document.querySelector("footer");
-
     if (!footer) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         setFooterVisible(entry.isIntersecting);
       },
-      {
-        threshold: 0.15,
-      }
+      { threshold: 0.15 }
     );
 
     observer.observe(footer);
@@ -33,8 +30,7 @@ export default function Header() {
     setMenuOpen(false);
 
     setTimeout(() => {
-      const el = document.getElementById("contact");
-      el?.scrollIntoView({
+      document.getElementById("contact")?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
@@ -46,15 +42,14 @@ export default function Header() {
       {/* Top Bar */}
       <motion.div
         animate={{
-          height: footerVisible ? 0 : "auto",
           opacity: footerVisible ? 0 : 1,
-          y: footerVisible ? -20 : 0,
+          y: footerVisible ? -100 : 0,
         }}
         transition={{
           duration: 0.4,
           ease: "easeInOut",
         }}
-        className="bg-gray-900 text-white text-xs sm:text-sm overflow-hidden"
+        className="absolute top-0 left-0 w-full bg-gray-900 text-white text-xs sm:text-sm"
       >
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 py-2 gap-1 sm:gap-0">
           <div className="flex flex-col sm:flex-row gap-1 sm:gap-6 text-center sm:text-left">
@@ -67,23 +62,29 @@ export default function Header() {
 
       {/* Navbar */}
       <motion.div
-        layout
+        animate={{
+          y: footerVisible ? -32 : 0,
+        }}
         transition={{
           duration: 0.4,
           ease: "easeInOut",
         }}
-        className="relative bg-white/80 backdrop-blur-md border-b shadow-sm"
+        className="relative mt-8 bg-white/80 backdrop-blur-md border-b shadow-sm"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
-            <Image src="/logo.jpg" alt="Varahi Logo" width={50} height={50} />
+            <Image
+              src="/logo.jpg"
+              alt="Varahi Logo"
+              width={50}
+              height={50}
+              style={{ width: "auto", height: "auto" }}
+            />
             <span className="text-lg sm:text-2xl lg:text-3xl font-black text-[#333]">
               VARAHI AUTOMATIONS
             </span>
           </Link>
 
-          {/* Desktop Nav */}
           <nav className="hidden lg:flex items-center gap-8">
             {navigation.map((item) => (
               <motion.div
@@ -110,7 +111,6 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* Mobile Button */}
           <button className="lg:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             <motion.svg
               animate={{ rotate: menuOpen ? 90 : 0 }}
@@ -129,7 +129,6 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div

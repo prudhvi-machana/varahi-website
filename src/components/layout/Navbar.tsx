@@ -10,7 +10,7 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
   const [topBarHeight, setTopBarHeight] = useState(32);
-  const topBarRef = useRef(null);
+  const topBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (topBarRef.current) {
@@ -58,7 +58,6 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Top Bar */}
       <motion.div
-        ref={topBarRef}
         animate={{
           opacity: footerVisible ? 0 : 1,
           y: footerVisible ? -100 : 0,
@@ -69,7 +68,10 @@ export default function Header() {
         }}
         className="absolute top-0 left-0 w-full bg-gray-900 text-white text-xs sm:text-sm"
       >
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 py-2 gap-1 sm:gap-0">
+        <div
+          ref={topBarRef}
+          className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center px-4 sm:px-6 py-2 gap-1 sm:gap-0"
+        >
           <div className="flex flex-col sm:flex-row gap-1 sm:gap-6 text-center sm:text-left">
             <span>+91 9701879791</span>
             <span>varahiautomations@gmail.com</span>

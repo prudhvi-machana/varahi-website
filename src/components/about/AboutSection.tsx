@@ -11,18 +11,9 @@ export default function AboutSection() {
 
         {/* Paragraph */}
         <p className="text-gray-700 leading-relaxed max-w-3xl">
-          Varahi Engineering is committed to delivering high-precision
-          manufacturing solutions with a focus on quality, reliability,
-          and innovation. With modern machinery and experienced
-          engineers, we provide machining services that meet the
-          highest industry standards.
-        </p>
-
-        <p className="text-gray-700 leading-relaxed max-w-3xl mt-4">
-          Our mission is to support industries with accurate and
-          efficient production capabilities. From prototype
-          development to large-scale manufacturing, we strive to
-          maintain excellence in every component we produce.
+          Varahi Automations being a trusted name in both sales and services of automation solutions. With a strong commitment to quality and customer satisfaction, we deliver reliable products and expert support tailored to your needs.
+          Our team combines technical expertise with a customer-first approach, ensuring smooth operations, timely service, and long-lasting solutions.
+          Varahi Automations lasting relationships through trust, performance, and excellence. It has the hands on experience of 15+ years in Instrumentation and Automation.
         </p>
 
       </div>

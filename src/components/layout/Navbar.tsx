@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { navigation } from "@/config/navigation";
@@ -9,6 +9,23 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
+  const [topBarHeight, setTopBarHeight] = useState(32);
+  const topBarRef = useRef(null);
+
+  useEffect(() => {
+    if (topBarRef.current) {
+      setTopBarHeight(topBarRef.current.offsetHeight);
+    }
+
+    const handleResize = () => {
+      if (topBarRef.current) {
+        setTopBarHeight(topBarRef.current.offsetHeight);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const footer = document.querySelector("footer");
@@ -41,6 +58,7 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full z-50">
       {/* Top Bar */}
       <motion.div
+        ref={topBarRef}
         animate={{
           opacity: footerVisible ? 0 : 1,
           y: footerVisible ? -100 : 0,
@@ -63,13 +81,13 @@ export default function Header() {
       {/* Navbar */}
       <motion.div
         animate={{
-          y: footerVisible ? -32 : 0,
+          y: footerVisible ? -topBarHeight : 0,
         }}
         transition={{
           duration: 0.4,
           ease: "easeInOut",
         }}
-        className="relative mt-8 bg-white/80 backdrop-blur-md border-b shadow-sm"
+        className="relative mt-[72px] sm:mt-8 bg-white/80 backdrop-blur-md border-b shadow-sm"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 sm:gap-3">

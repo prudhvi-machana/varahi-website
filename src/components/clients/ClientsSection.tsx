@@ -85,7 +85,7 @@ export default function ClientsSection() {
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current) return;
-    const delta = e.clientX - lastPointerX.current;
+    const delta = (e.clientX - lastPointerX.current) * 2.5;
     lastPointerX.current = e.clientX;
     velocityRef.current = delta;
     posRef.current += delta;
@@ -139,8 +139,8 @@ export default function ClientsSection() {
                   draggable={false}
                   className="
                     h-[80px] sm:h-[100px] md:h-[130px] lg:h-[160px]
-                    w-auto object-contain grayscale
-                    hover:grayscale-0 transition duration-300
+                    w-auto object-contain
+                    transition duration-300
                   "
                 />
               </div>

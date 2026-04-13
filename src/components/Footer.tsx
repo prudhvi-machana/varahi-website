@@ -23,9 +23,16 @@ export default function Footer() {
               height={40}
               style={{ width: "auto", height: "auto" }}
             />
-            <h2 className="text-xl sm:text-2xl font-semibold">
-              VARAHI AUTOMATIONS
-            </h2>
+
+            <div>
+              <h2 className="text-xl sm:text-2xl font-semibold">
+                VARAHI AUTOMATIONS
+              </h2>
+
+              <p className="text-xs sm:text-base text-gray-200 mt-1">
+                GSTIN: 37RWNPS6311E1ZV
+              </p>
+            </div>
           </div>
 
           <p className="text-gray-300 text-sm sm:text-base leading-relaxed">

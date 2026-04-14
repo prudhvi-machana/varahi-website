@@ -6,41 +6,44 @@ import Link from "next/link";
 import { navigation } from "@/config/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
+const DEFAULT_TOPBAR_HEIGHT = 32;
+
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [footerVisible, setFooterVisible] = useState(false);
-  const [topBarHeight, setTopBarHeight] = useState(32);
+  const [topBarHeight, setTopBarHeight] = useState(DEFAULT_TOPBAR_HEIGHT);
+
   const topBarRef = useRef<HTMLDivElement>(null);
 
+  // Measure once after mount
   useEffect(() => {
     if (topBarRef.current) {
       setTopBarHeight(topBarRef.current.offsetHeight);
     }
-
-    const handleResize = () => {
-      if (topBarRef.current) {
-        setTopBarHeight(topBarRef.current.offsetHeight);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Delay footer observer to avoid hurting initial render/LCP
   useEffect(() => {
-    const footer = document.querySelector("footer");
-    if (!footer) return;
+    let observer: IntersectionObserver | null = null;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setFooterVisible(entry.isIntersecting);
-      },
-      { threshold: 0.15 }
-    );
+    const timer = setTimeout(() => {
+      const footer = document.querySelector("footer");
+      if (!footer) return;
 
-    observer.observe(footer);
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setFooterVisible(entry.isIntersecting);
+        },
+        { threshold: 0.15 }
+      );
 
-    return () => observer.disconnect();
+      observer.observe(footer);
+    }, 1200);
+
+    return () => {
+      clearTimeout(timer);
+      observer?.disconnect();
+    };
   }, []);
 
   const scrollToContact = () => {
@@ -98,7 +101,8 @@ export default function Header() {
               alt="Varahi Logo"
               width={50}
               height={50}
-              style={{ width: "auto", height: "auto" }}
+              priority
+              className="w-auto h-auto"
             />
             <span className="text-lg sm:text-2xl lg:text-3xl font-black text-[#333]">
               VARAHI AUTOMATIONS

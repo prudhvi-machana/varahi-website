@@ -90,25 +90,31 @@ export default function HeroCarousel() {
         </div>
       </div>
 
+      {/* Previous Arrow */}
       <button
         onClick={scrollPrev}
+        aria-label="Previous slide"
         className="hidden md:flex absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white/50 transition p-3 lg:p-4 rounded-full text-white text-xl"
       >
         ‹
       </button>
 
+      {/* Next Arrow */}
       <button
         onClick={scrollNext}
+        aria-label="Next slide"
         className="hidden md:flex absolute right-4 lg:right-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white/50 transition p-3 lg:p-4 rounded-full text-white text-xl"
       >
         ›
       </button>
 
+      {/* Dots */}
       <div className="absolute bottom-4 md:bottom-6 w-full flex justify-center gap-3">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => emblaApi?.scrollTo(index)}
+            aria-label={`Go to slide ${index + 1}`}
             className={`h-3 w-3 rounded-full transition ${
               index === selectedIndex
                 ? "bg-white scale-110"

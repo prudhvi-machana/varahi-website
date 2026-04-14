@@ -49,6 +49,10 @@ export default function HeroCarousel() {
 
     emblaApi.on("select", onSelect);
     onSelect();
+
+    return () => {
+      emblaApi.off("select", onSelect);
+    };
   }, [emblaApi]);
 
   return (
@@ -62,16 +66,16 @@ export default function HeroCarousel() {
             >
               <Image
                 src={slide.image}
-                alt="hero"
+                alt={slide.title}
                 fill
-                priority
+                priority={index === 0}
+                loading={index === 0 ? "eager" : "lazy"}
+                sizes="100vw"
                 className="object-cover"
               />
 
-              {/* Overlay */}
               <div className="absolute inset-0 bg-black/50 flex items-center justify-center md:justify-start">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center md:text-left">
-                  
                   <h1 className="text-2xl sm:text-4xl lg:text-6xl font-bold mb-4 leading-tight">
                     {slide.title}
                   </h1>
@@ -79,7 +83,6 @@ export default function HeroCarousel() {
                   <p className="text-sm sm:text-base lg:text-lg max-w-xl mx-auto md:mx-0 opacity-90">
                     {slide.subtitle}
                   </p>
-
                 </div>
               </div>
             </div>
@@ -87,7 +90,6 @@ export default function HeroCarousel() {
         </div>
       </div>
 
-      {/* Arrows (hidden on small screens) */}
       <button
         onClick={scrollPrev}
         className="hidden md:flex absolute left-4 lg:left-6 top-1/2 -translate-y-1/2 bg-white/30 backdrop-blur-md hover:bg-white/50 transition p-3 lg:p-4 rounded-full text-white text-xl"
@@ -102,7 +104,6 @@ export default function HeroCarousel() {
         ›
       </button>
 
-      {/* Dots */}
       <div className="absolute bottom-4 md:bottom-6 w-full flex justify-center gap-3">
         {slides.map((_, index) => (
           <button

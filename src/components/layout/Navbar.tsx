@@ -15,11 +15,16 @@ export default function Header() {
 
   const topBarRef = useRef<HTMLDivElement>(null);
 
-  // Measure once after mount
+  // Measure on mount AND whenever the viewport is resized
   useEffect(() => {
-    if (topBarRef.current) {
-      setTopBarHeight(topBarRef.current.offsetHeight);
-    }
+    const measure = () => {
+      if (topBarRef.current) {
+        setTopBarHeight(topBarRef.current.offsetHeight);
+      }
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
   // Delay footer observer to avoid hurting initial render/LCP
@@ -83,7 +88,7 @@ export default function Header() {
         </div>
       </motion.div>
 
-      {/* Navbar */}
+      {/* Navbar — marginTop is driven by the same measured value used in the animation */}
       <motion.div
         animate={{
           y: footerVisible ? -topBarHeight : 0,
@@ -92,7 +97,8 @@ export default function Header() {
           duration: 0.4,
           ease: "easeInOut",
         }}
-        className="relative mt-[72px] sm:mt-8 bg-white/80 backdrop-blur-md border-b shadow-sm"
+        style={{ marginTop: topBarHeight }}
+        className="relative bg-white/80 backdrop-blur-md border-b shadow-sm"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 sm:h-20 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2 sm:gap-3">

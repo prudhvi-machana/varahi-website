@@ -1,22 +1,23 @@
 import Image from "next/image";
-
-const products = [
-  { name: "Pressure Gauge", image: "/products/PressureGauge.jpg" },
-  { name: "Temperature Gauge", image: "/products/TemperatureGauge.jpg" },
-  { name: "RTD", image: "/products/RTD.jpg" },
-  { name: "Thermocouple", image: "/products/Thermocouple.jpg" },
-  { name: "Thermowell", image: "/products/Thermowells.jpg" },
-  { name: "Flow Meter", image: "/products/Flowmeters.jpg" },
-  { name: "DP Transmitter", image: "/products/DP Transmitter.jpg" },
-];
+import { supabase } from "@/lib/supabase";
 
 interface ProductsSectionProps {
   showHeader?: boolean;
 }
 
-export default function ProductsSection({
+export default async function ProductsSection({
   showHeader = true,
 }: ProductsSectionProps) {
+
+  const { data: products, error } = await supabase
+    .from("products")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+  }
+
   return (
     <section className="py-16 sm:py-20 bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,18 +38,22 @@ export default function ProductsSection({
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-          {products.map((product, index) => (
+
+          {products?.map((product) => (
             <div
-              key={index}
+              key={product.id}
               className="text-center group bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition"
             >
               <div className="relative h-32 sm:h-36 w-full">
+
                 <Image
-                  src={product.image}
+                  src={product.image_url}
                   alt={product.name}
                   fill
+                  unoptimized
                   className="object-contain"
                 />
+
               </div>
 
               <div className="mt-4 bg-slate-800 text-white py-2 px-3 rounded-lg">
@@ -56,6 +61,7 @@ export default function ProductsSection({
               </div>
             </div>
           ))}
+
         </div>
 
       </div>

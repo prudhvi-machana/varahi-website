@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ProductsSection from "@/components/products/ProductsSection";
 import Footer from "@/components/Footer";
 
